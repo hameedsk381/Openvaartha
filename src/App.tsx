@@ -5,6 +5,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import ArticlePage from "./pages/ArticlePage.tsx";
+import CategoryPage from "./pages/CategoryPage.tsx";
+import SearchPage from "./pages/SearchPage.tsx";
+import TrendingPage from "./pages/TrendingPage.tsx";
+import ExplainersPage from "./pages/ExplainersPage.tsx";
+import LiveUpdatesPage from "./pages/LiveUpdatesPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -14,16 +19,16 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <div className="relative min-h-screen overflow-x-hidden bg-background">
-        {/* Liquid Background Blobs */}
-        <div className="liquid-blob top-[-10%] left-[-10%] w-[500px] h-[500px] bg-primary/30" />
-        <div className="liquid-blob bottom-[20%] right-[-5%] w-[400px] h-[400px] bg-secondary/40 animation-delay-2000" />
-        <div className="liquid-blob top-[40%] left-[30%] w-[300px] h-[300px] bg-primary/20 animation-delay-4000" />
-
+      <div className="relative min-h-screen overflow-x-hidden bg-background selection:bg-primary/10">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/article/:slug" element={<ArticlePage />} />
+            <Route path="/category/:categoryId" element={<CategoryPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/trending" element={<TrendingPage />} />
+            <Route path="/explainers" element={<ExplainersPage />} />
+            <Route path="/live" element={<LiveUpdatesPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

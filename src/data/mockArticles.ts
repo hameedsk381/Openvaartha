@@ -9,12 +9,19 @@ export interface Article {
   readTime: string;
   language: string;
   trending?: boolean;
+  isBreaking?: boolean;
   thumbnail?: string;
+  instagramUrl?: string; // Social integration
   publishedAt: string;
+  lastUpdated?: string;
+  author: string;
+  sources?: string[];
   content: {
     tldr: string;
     points: string[];
     body: string;
+    timeline?: { date: string; event: string }[];
+    explainer?: { question: string; answer: string }[];
   };
 }
 
@@ -46,10 +53,14 @@ export const articles: Article[] = [
     readTime: "45 sec",
     language: "en",
     trending: true,
+    isBreaking: true,
     thumbnail: "/thumbnails/ap_budget.png",
     publishedAt: "2026-04-02T08:00:00Z",
+    lastUpdated: "2026-04-02T10:30:00Z",
+    author: "Open Vaartha Desk",
+    sources: ["AP Finance Dept", "AP Govt Gazette", "PTI"],
     content: {
-      tldr: "AP government increases spending on infrastructure and welfare schemes. Amaravati capital city project gets renewed funding. Major push for irrigation and rural employment programs.",
+      tldr: "AP government increases spending on infrastructure and welfare schemes. Amaravati capital city project gets renewed funding.",
       points: [
         "₹20,000 crore allocated for Amaravati capital development",
         "New irrigation projects across Rayalaseema region announced",
@@ -57,7 +68,12 @@ export const articles: Article[] = [
         "Free laptop scheme for intermediate students expanded",
         "Healthcare budget increased by 18% year-over-year"
       ],
-      body: "The Andhra Pradesh government presented its annual budget for 2026-27 with a total outlay of ₹2.8 lakh crore, marking a significant increase from the previous year. Chief Minister highlighted the government's commitment to completing the Amaravati capital city project within the next three years.\n\nThe budget places heavy emphasis on infrastructure development, with dedicated allocations for national highways, rural roads, and port connectivity. The Machilipatnam port project received ₹3,000 crore in fresh funding.\n\nAgriculture continues to be a priority with the Rythu Bharosa scheme getting enhanced payouts. Farmers will now receive ₹15,000 annually under the direct benefit transfer program. The irrigation sector saw allocations for completing pending projects in the Godavari and Krishna basins.\n\nEducation received a substantial boost with the expansion of the free laptop scheme to all intermediate students across government and aided colleges. The establishment of five new universities in underserved districts was also announced.\n\nThe healthcare sector saw an 18% increase in budget allocation, with plans to establish 200 new primary health centers and upgrade existing district hospitals with modern diagnostic equipment."
+      body: "The Andhra Pradesh government presented its annual budget for 2026-27 with a total outlay of ₹2.8 lakh crore. Chief Minister highlighted the government's commitment to completing the Amaravati capital city project...",
+      timeline: [
+        { date: "Feb 2026", event: "Pre-budget consultations with farmers" },
+        { date: "Mar 15, 2026", event: "Drafting of final allocations" },
+        { date: "Apr 2, 2026", event: "Budget presented in State Assembly" }
+      ]
     }
   },
   {
@@ -70,17 +86,20 @@ export const articles: Article[] = [
     language: "en",
     trending: true,
     thumbnail: "/thumbnails/rrr_sequel.png",
+    instagramUrl: "https://www.instagram.com/p/C58vQZSS_q9/", 
     publishedAt: "2026-04-01T14:00:00Z",
+    author: "Cinema Intel Team",
+    sources: ["Press Meet Hyderabad", "Official Production Handle"],
     content: {
-      tldr: "SS Rajamouli officially confirms RRR 2 with both Ram Charan and Jr NTR returning. The film will have a pan-world release strategy with shooting starting October 2026.",
+      tldr: "SS Rajamouli officially confirms RRR 2 with both Ram Charan and Jr NTR returning. The film will have a pan-world release.",
       points: [
         "Both Ram Charan and Jr NTR confirmed to return",
-        "Budget estimated at ₹800 crore — India's most expensive film",
+        "Budget estimated at ₹800 crore",
         "Shooting begins October 2026 across 5 countries",
         "MM Keeravani returns as music composer",
         "Planned for Sankranti 2028 release"
       ],
-      body: "In what is being called the biggest announcement in Indian cinema this year, legendary director SS Rajamouli has officially confirmed the sequel to his global blockbuster RRR. The film, tentatively titled 'RRR 2: Rise Once More,' will bring back the dynamic duo of Ram Charan and Jr NTR.\n\nSpeaking at a press conference in Hyderabad, Rajamouli said the story has been in development for two years. 'The sequel will explore a completely new dimension of the characters while maintaining the emotional core that audiences loved,' he stated.\n\nThe production budget is estimated at ₹800 crore, making it potentially the most expensive Indian film ever produced. DVV Danayya returns as producer with backing from international studios for global distribution.\n\nMM Keeravani, who won the Academy Award for 'Naatu Naatu,' will compose the music. The film will feature extensive VFX sequences with work being handled by both Indian and international studios.\n\nShooting is planned across locations in India, Europe, Africa, Japan, and South America, with principal photography beginning in October 2026."
+      body: "In what is being called the biggest announcement in Indian cinema this year, legendary director SS Rajamouli has officially confirmed the sequel..."
     }
   },
   {
@@ -91,18 +110,21 @@ export const articles: Article[] = [
     category: "Local News",
     readTime: "40 sec",
     language: "en",
+    isBreaking: true,
     thumbnail: "/thumbnails/bengaluru_metro.png",
     publishedAt: "2026-04-01T10:00:00Z",
+    author: "Urban Desk",
+    sources: ["PIB India", "Karnataka Transport Dept"],
     content: {
-      tldr: "Bengaluru Metro Phase 3 gets Union Cabinet approval. The 45 km ring line will connect Hebbal, Koramangala, JP Nagar, and Rajajinagar, expected to reduce traffic congestion by 30%.",
+      tldr: "Bengaluru Metro Phase 3 gets Union Cabinet approval. The 45 km ring line will reduce traffic congestion by 30%.",
       points: [
-        "45 km ring line connecting major residential and IT hubs",
+        "45 km ring line connecting major IT hubs",
         "₹18,000 crore project with 50-50 Centre-State funding",
         "32 new stations planned along the route",
         "Expected completion by 2030",
         "Will integrate with suburban rail network"
       ],
-      body: "The Union Cabinet has approved Bengaluru Metro Phase 3, a 45 km ring line that promises to transform public transportation in India's Silicon Valley. The project, estimated at ₹18,000 crore, will be funded equally by the Central and Karnataka state governments.\n\nThe ring line will connect major hubs including Hebbal, Koramangala, JP Nagar, Rajajinagar, and Yeshwanthpur, creating a circular metro network that integrates with existing Phase 1 and Phase 2 lines.\n\nBMRCL Managing Director stated that the project will feature 32 new stations, with several having multi-modal integration with the upcoming suburban rail network and BMTC bus terminals.\n\nThe project is expected to be completed by 2030 and will reduce traffic congestion on major corridors by an estimated 30%. Daily ridership is projected at 8 lakh passengers once fully operational."
+      body: "The Union Cabinet has approved Bengaluru Metro Phase 3, a 45 km ring line that promises to transform public transportation..."
     }
   },
   {
@@ -116,8 +138,10 @@ export const articles: Article[] = [
     trending: true,
     thumbnail: "/thumbnails/hyderabad_ai.png",
     publishedAt: "2026-04-02T06:00:00Z",
+    author: "Tech Dossier Team",
+    sources: ["NASSCOM Report", "Telangana IT Dept"],
     content: {
-      tldr: "Hyderabad's AI startup ecosystem has grown 340% in 3 years, overtaking Bengaluru in growth rate. T-Hub and IIIT Hyderabad driving innovation with government backing.",
+      tldr: "Hyderabad's AI startup ecosystem has grown 340% in 3 years, overtaking Bengaluru in growth rate.",
       points: [
         "200+ AI startups now operating from Hyderabad",
         "340% growth in AI ecosystem over 3 years",
@@ -125,7 +149,7 @@ export const articles: Article[] = [
         "IIIT Hyderabad producing top AI research globally",
         "Telangana AI Mission attracted ₹4,000 crore in investments"
       ],
-      body: "Hyderabad has quietly but decisively emerged as India's artificial intelligence capital, with over 200 AI-focused startups now operating from the city. A new NASSCOM report reveals that Telangana's AI ecosystem has grown 340% over the past three years, surpassing Bengaluru's growth rate for the first time.\n\nThe growth is attributed to a combination of factors: world-class academic institutions like IIIT Hyderabad producing cutting-edge AI research, the state government's proactive Telangana AI Mission (T-AIM), and the presence of T-Hub 2.0 — the world's largest innovation campus.\n\nMajor global companies including Google, Microsoft, Amazon, and Apple have expanded their AI research teams in Hyderabad. The city now hosts the largest AI research workforce outside of the US Bay Area.\n\nThe Telangana government's AI Mission has attracted over ₹4,000 crore in investments, with a focus on AI applications in agriculture, healthcare, and governance. The state offers special incentives for AI startups including subsidized office space and cloud computing credits."
+      body: "Hyderabad has quietly but decisively emerged as India's artificial intelligence capital, with over 200 AI-focused startups..."
     }
   },
   {
@@ -137,16 +161,18 @@ export const articles: Article[] = [
     readTime: "35 sec",
     language: "en",
     publishedAt: "2026-03-31T12:00:00Z",
+    author: "Regional Desk",
+    sources: ["Kerala Disaster Management Authority", "IIT Madras"],
     content: {
-      tldr: "Kerala debuts India's most sophisticated monsoon warning system using AI and IoT sensors. Can predict district-level flooding 72 hours ahead, a major upgrade after the devastating 2018 floods.",
+      tldr: "Kerala debuts India's most sophisticated monsoon warning system using AI and IoT sensors.",
       points: [
         "AI model trained on 50 years of rainfall data",
         "5,000 IoT sensors deployed across all 14 districts",
         "72-hour advance flood prediction with 90% accuracy",
-        "Automatic alerts via SMS, WhatsApp, and local TV",
+        "Automatic alerts via SMS and local TV",
         "₹500 crore investment in disaster preparedness"
       ],
-      body: "Kerala has launched India's most advanced monsoon early warning system, combining artificial intelligence with a network of 5,000 IoT sensors deployed across all 14 districts. The system can predict district-level flooding up to 72 hours in advance with 90% accuracy.\n\nDeveloped in collaboration with IIT Madras and the Indian Space Research Organisation (ISRO), the AI model has been trained on 50 years of historical rainfall, river flow, and topographical data specific to Kerala's unique geography.\n\nThe system automatically triggers multi-channel alerts via SMS, WhatsApp, local television broadcasts, and community loudspeakers when flood risk exceeds predetermined thresholds. District collectors receive detailed risk maps with evacuation route recommendations.\n\nThe state has invested ₹500 crore in overall disaster preparedness, including the warning system, reinforced relief camps, pre-positioned rescue equipment, and trained volunteer networks in flood-prone areas."
+      body: "Kerala has launched India's most advanced monsoon early warning system..."
     }
   },
   {
@@ -158,17 +184,18 @@ export const articles: Article[] = [
     readTime: "30 sec",
     language: "en",
     trending: true,
+    thumbnail: "/thumbnails/csk_ipl.png",
     publishedAt: "2026-04-02T09:00:00Z",
+    author: "Sports Tracker",
+    sources: ["IPL Media", "CSK Official"],
     content: {
-      tldr: "MS Dhoni leads CSK to IPL 2026 playoffs in what's widely expected to be his final season. Emotional scenes at Chepauk as fans celebrate the legendary captain's journey.",
+      tldr: "MS Dhoni leads CSK to IPL 2026 playoffs in what's widely expected to be his final season.",
       points: [
         "CSK clinch 4th position with 8 wins from 14 matches",
-        "Dhoni scores crucial 42*(18) in the must-win last league game",
-        "Ruturaj Gaikwad leads run charts with 580 runs",
-        "Chepauk crowd gives Dhoni 10-minute standing ovation",
+        "Dhoni scores crucial 42*(18) in league game",
         "Qualifier 2 against RCB on April 5th"
       ],
-      body: "In what is being described as one of the most emotional nights in IPL history, Chennai Super Kings stormed into the IPL 2026 playoffs with a thrilling 6-wicket victory over Mumbai Indians at MA Chidambaram Stadium.\n\nMS Dhoni, in what's widely expected to be his final IPL season, played a vintage knock of 42 not out from just 18 balls, including four massive sixes, to guide CSK home in the must-win encounter. The Chepauk crowd erupted in celebration, giving the legendary captain a 10-minute standing ovation.\n\nCaptain Ruturaj Gaikwad has been in phenomenal form, leading the tournament run charts with 580 runs from 14 matches. The young batting lineup, combined with Dhoni's finishing prowess, has been the cornerstone of CSK's campaign.\n\nCSK will face Royal Challengers Bengaluru in Qualifier 2 on April 5th, with the winner advancing to face Gujarat Titans in the final."
+      body: "In what is being described as one of the most emotional nights in IPL history..."
     }
   },
   {
@@ -180,16 +207,16 @@ export const articles: Article[] = [
     readTime: "40 sec",
     language: "en",
     publishedAt: "2026-03-30T11:00:00Z",
+    author: "Industry Watch",
+    sources: ["TN Industry Dept", "Automotive News"],
     content: {
-      tldr: "Tamil Nadu announces comprehensive EV policy targeting 50% electric vehicle adoption by 2030. Major incentives for manufacturers and buyers, with Chennai positioned as India's EV capital.",
+      tldr: "Tamil Nadu announces comprehensive EV policy targeting 50% adoption by 2030.",
       points: [
-        "50% EV adoption target by 2030 across all vehicle categories",
-        "₹10,000 crore incentive package for EV manufacturers",
-        "100% road tax exemption for EVs until 2030",
-        "5,000 charging stations planned across the state",
-        "Ola, TVS, and Hyundai expanding EV plants in TN"
+        "50% EV adoption target across all categories",
+        "₹10,000 crore incentive package",
+        "100% road tax exemption until 2030"
       ],
-      body: "Tamil Nadu has unveiled one of India's most ambitious electric vehicle policies, targeting 50% EV adoption across all vehicle categories by 2030. The comprehensive policy includes a ₹10,000 crore incentive package for manufacturers, positioning Chennai as India's electric vehicle capital.\n\nThe state government will offer 100% road tax exemption for all electric vehicles purchased before 2030, along with subsidies of up to ₹1.5 lakh for two-wheelers and ₹3 lakh for four-wheelers. Commercial EVs will receive even higher subsidies.\n\nA network of 5,000 charging stations will be established across the state, with mandatory EV charging provisions in all new commercial and residential buildings. The government is also partnering with TANGEDCO to offer special electricity tariffs for EV charging.\n\nMajor manufacturers including Ola Electric, TVS Motor, and Hyundai are expanding their EV manufacturing facilities in Tamil Nadu. The state already accounts for 35% of India's automobile production and aims to maintain its dominance in the EV transition."
+      body: "Tamil Nadu has unveiled one of India's most ambitious electric vehicle policies..."
     }
   },
   {
@@ -201,16 +228,16 @@ export const articles: Article[] = [
     readTime: "30 sec",
     language: "en",
     publishedAt: "2026-03-29T16:00:00Z",
+    author: "Entertainment Desk",
+    sources: ["Box Office Mojo", "Telugu Film Chamber"],
     content: {
-      tldr: "Telugu film industry's global box office collection crosses ₹10,000 crore for the fiscal year, a historic milestone. Pan-India appeal and growing international markets drive the surge.",
+      tldr: "Telugu film industry global box office cross ₹10,000 crore, a historic milestone.",
       points: [
-        "₹10,000 crore global box office — highest ever for any Indian film industry",
-        "North American collections up 180% year-over-year",
-        "5 Telugu films crossed ₹500 crore worldwide",
-        "OTT deals contributing additional ₹3,000 crore in revenue",
-        "Hyderabad film city expansion announced"
+        "₹10,000 crore global box office — highest Indian industry",
+        "5 films crossed ₹500 crore worldwide",
+        "OTT deals worth ₹3,000 crore"
       ],
-      body: "The Telugu film industry has achieved a historic milestone, with its global box office collections crossing ₹10,000 crore for the fiscal year 2025-26. This makes Tollywood the highest-grossing Indian film industry globally, overtaking Bollywood for the second consecutive year.\n\nThe surge is driven by the pan-India appeal of Telugu films, which have found massive audiences across Hindi-speaking markets and internationally. North American collections alone have grown 180% year-over-year.\n\nFive Telugu films crossed the ₹500 crore mark worldwide this year, with two entering the exclusive ₹1,000 crore club. The combination of high production values, compelling storytelling, and star power has positioned Telugu cinema as India's premier film industry.\n\nOTT platforms have added another ₹3,000 crore in revenue through digital rights deals, with major streamers competing aggressively for Telugu content. The state government has announced a major expansion of Hyderabad's film city to accommodate the growing production pipeline."
+      body: "The Telugu film industry has achieved a historic milestone..."
     }
   },
   {
@@ -222,16 +249,16 @@ export const articles: Article[] = [
     readTime: "35 sec",
     language: "en",
     publishedAt: "2026-03-28T09:00:00Z",
+    author: "Capital News",
+    sources: ["Karnataka Startup Cell", "Business Line"],
     content: {
-      tldr: "Karnataka government creates India's largest state-level startup fund at ₹5,000 crore, specifically targeting tier-2 cities. Aims to decongest Bengaluru while spreading tech prosperity.",
+      tldr: "Karnataka targets tier-2 cities with ₹5,000 crore fund to decongest Bengaluru.",
       points: [
-        "₹5,000 crore fund — largest state startup fund in India",
-        "Dedicated tech parks in Mysuru, Mangaluru, and Hubli-Dharwad",
-        "₹50 lakh seed funding for qualifying startups",
-        "Free coworking spaces for first 2 years",
-        "Tax holidays for 5 years for startups in tier-2 cities"
+        "₹5,000 crore fund for tier-2 ecosystems",
+        "Free coworking for first 2 years",
+        "5-year tax holidays"
       ],
-      body: "In a bold move to decentralize Karnataka's tech ecosystem, the state government has launched a ₹5,000 crore startup fund specifically targeting tier-2 cities. The fund, the largest of its kind by any Indian state, aims to create vibrant startup ecosystems in Mysuru, Mangaluru, Hubli-Dharwad, Belagavi, and Kalaburagi.\n\nEach city will get a dedicated tech park with state-of-the-art infrastructure, high-speed internet connectivity, and built-in incubation facilities. The government will provide free coworking spaces for the first two years and seed funding of up to ₹50 lakh for qualifying startups.\n\nStartups setting up in tier-2 cities will enjoy 5-year tax holidays, subsidized electricity, and preferential access to government contracts. The program also includes partnerships with IITs, NITs, and leading universities for talent pipeline development.\n\nThe initiative is expected to create 50,000 direct jobs and attract international companies looking for cost-effective alternatives to Bengaluru's increasingly expensive real estate market."
+      body: "In a bold move to decentralize Karnataka's tech ecosystem..."
     }
   },
   {
@@ -243,16 +270,16 @@ export const articles: Article[] = [
     readTime: "30 sec",
     language: "en",
     publishedAt: "2026-03-27T13:00:00Z",
+    author: "Tech Dossier Team",
+    sources: ["AP IT Minister", "NASSCOM"],
     content: {
-      tldr: "Visakhapatnam's new IT corridor has attracted major companies including TCS, Infosys, and Wipro, promising 25,000 new tech jobs. AP government's incentive package and coastal lifestyle are key draws.",
+      tldr: "Visakhapatnam's new IT corridor has attracted TCS, Infosys, and Wipro.",
       points: [
-        "TCS, Infosys, and Wipro setting up major campuses",
-        "25,000 new IT jobs expected over 3 years",
-        "₹2,000 crore government incentive package",
-        "Dedicated SEZ with plug-and-play infrastructure",
-        "Direct flights to Hyderabad, Bengaluru, and Chennai"
+        "Major campuses being set up in Vizag",
+        "25,000 new IT jobs expected",
+        "₹2,000 crore government incentive package"
       ],
-      body: "Visakhapatnam is rapidly emerging as Andhra Pradesh's IT powerhouse, with the newly developed IT corridor attracting major technology companies. TCS, Infosys, and Wipro have all announced plans to set up significant campuses in the port city, collectively promising over 25,000 new technology jobs.\n\nThe Andhra Pradesh government has offered a ₹2,000 crore incentive package including subsidized land, tax exemptions, and infrastructure support. The dedicated IT SEZ features plug-and-play office spaces, reliable power supply with 100% backup, and high-speed fiber connectivity.\n\nVizag's coastal lifestyle, relatively lower cost of living compared to Hyderabad and Bengaluru, and improving connectivity with direct flights to major tech hubs are cited as major attractions for both companies and employees.\n\nThe government is also investing in upskilling programs through partnerships with local engineering colleges and JNTU Vizag, ensuring a steady pipeline of trained technology professionals for the growing IT ecosystem."
+      body: "Visakhapatnam is rapidly emerging as Andhra Pradesh's IT powerhouse..."
     }
   }
 ];

@@ -1,13 +1,19 @@
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { articles, categoryColors } from "@/data/mockArticles";
+import { articles, Article } from "@/data/mockArticles";
 import Navbar from "@/components/Navbar";
 import FeedCard from "@/components/FeedCard";
-import { ArrowLeft, Share2, Clock, Flame, Bookmark, MessageCircle, Languages, Check, ChevronRight } from "lucide-react";
+import { 
+  Share2, Bookmark, Check, ChevronRight, ArrowLeft, 
+  Clock, Calendar, Sparkles, ArrowUpRight, 
+  User, ExternalLink, History, Info,
+  Zap
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useReadingList } from "@/hooks/use-reading-list";
 import { toast } from "sonner";
+import InstagramEmbed from "@/components/InstagramEmbed";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -23,8 +29,7 @@ const ArticlePage = () => {
   const { toggleSave, isSaved } = useReadingList();
 
   const article = articles.find((a) => a.slug === slug);
-  const nextArticle = articles.find((a) => a.id !== article?.id);
-
+  
   useEffect(() => {
     window.scrollTo(0, 0);
     const handleScroll = () => {
@@ -33,7 +38,7 @@ const ArticlePage = () => {
       setScrollProgress(progress);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [slug]);
 
@@ -41,9 +46,11 @@ const ArticlePage = () => {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="mx-auto max-w-2xl px-4 py-20 text-center animate-fade-in">
-          <p className="text-muted-foreground mb-4 font-medium">Article not found.</p>
-          <Link to="/" className="text-foreground hover:underline text-sm font-bold">← Back to feed</Link>
+        <div className="mx-auto max-w-2xl px-5 py-24 text-center">
+          <p className="text-muted-foreground font-black uppercase tracking-[0.2em] mb-6 opacity-40">Intelligence Missing</p>
+          <Link to="/" className="inline-flex items-center gap-2 text-sm font-black text-foreground hover:translate-x-1 transition-all">
+            <ArrowLeft className="h-4 w-4" /> Return to feed
+          </Link>
         </div>
       </div>
     );
@@ -51,243 +58,212 @@ const ArticlePage = () => {
 
   const recommendations = articles.filter((a) => a.id !== article.id && a.category === article.category).slice(0, 2);
 
-  const handleToggleSave = () => {
-    const saved = toggleSave(article);
-    toast.success(saved ? "Added to Intelligence Briefings" : "Removed from saved stories", {
-      description: article.title,
-      icon: saved ? <Bookmark className="h-4 w-4 fill-current" /> : <Bookmark className="h-4 w-4" />
-    });
-  };
-
-  const handleShare = async () => {
-    if (navigator.share) {
-      await navigator.share({ title: article.title, text: article.summary, url: window.location.href });
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast.info("Link copied to clipboard");
-    }
-  };
-
   const publishedDate = new Date(article.publishedAt).toLocaleDateString("en-IN", {
     day: "numeric",
     month: "short",
     year: "numeric",
   });
+  
+  const lastUpdatedDate = article.lastUpdated ? new Date(article.lastUpdated).toLocaleTimeString("en-IN", {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  }) : null;
 
   return (
-    <div className="relative min-h-screen bg-background overflow-x-hidden">
-      {/* Liquid Background Blobs */}
-      <div className="liquid-blob top-[-10%] right-[-10%] w-[600px] h-[600px] bg-primary/20" />
-      <div className="liquid-blob bottom-[10%] left-[-5%] w-[500px] h-[500px] bg-secondary/30 animation-delay-2000" />
-
-      {/* Reading Progress */}
-      <div className="fixed top-0 left-0 right-0 z-[60] h-1 bg-white/10 overflow-hidden">
-        <div
-          className="h-full bg-primary transition-all duration-300 ease-out shadow-[0_0_15px_hsl(var(--primary))]"
-          style={{ width: `${scrollProgress}%` }}
-        />
+    <div className="relative min-h-screen bg-background selection:bg-primary/10 selection:text-primary pb-24 sm:pb-32">
+      {/* Progress Bar */}
+      <div className="fixed top-0 left-0 right-0 z-[60] h-1 bg-black/5">
+        <div className="h-full bg-primary transition-[width] duration-300 ease-out" style={{ width: `${scrollProgress}%` }} />
       </div>
 
       <Navbar />
 
-      <main className="relative z-10 mx-auto max-w-5xl px-4 sm:px-8 lg:px-12 pt-8 pb-32 sm:pb-24" role="main">
-        {/* Superior Navigation Hierarchy */}
-        <div className="mb-10 animate-fade-in">
-          <Breadcrumb>
-            <BreadcrumbList className="text-[11px] font-bold uppercase tracking-widest">
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to={`/?category=${article.category}`} className="hover:text-primary transition-colors">{article.category}</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage className="text-muted-foreground line-clamp-1 max-w-[200px] font-black">{article.title}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
-
-        <article aria-label={article.title} className="animate-fade-in" style={{ animationDelay: "100ms", animationFillMode: "both" }}>
-          {/* Headline Section */}
-          <div className="flex flex-wrap items-center gap-3 mb-8">
-            <span className={cn(
-              "inline-flex items-center rounded-full px-4 py-2 text-[11px] font-black uppercase tracking-widest text-white shadow-xl backdrop-blur-md bg-opacity-80 ring-1 ring-white/20",
-              categoryColors[article.category]
-            )}>
+      <main className="relative z-10 mx-auto max-w-[800px] px-6 sm:px-12 pt-24 sm:pt-40" role="main">
+        {/* Trust Header */}
+        <div className="mb-12 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+           {/* Category & Status */}
+          <div className="flex items-center gap-3">
+            <span className="px-3 py-1 bg-primary text-white text-[10px] font-black uppercase tracking-widest rounded-full">
               {article.category}
             </span>
-            {article.trending && (
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/90 dark:bg-black/80 px-4 py-2 text-[11px] font-black uppercase tracking-widest text-foreground shadow-xl backdrop-blur-md border border-white/20">
-                <Flame className="h-4 w-4 text-orange-500 fill-orange-500" />
-                Trending Brief
+            {article.isBreaking && (
+              <span className="flex items-center gap-1.5 px-3 py-1 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-full animate-pulse">
+                <Zap className="h-3 w-3 fill-white" /> Breaking
               </span>
             )}
           </div>
 
-          <h1 className="text-4xl sm:text-7xl font-black text-foreground mb-10 tracking-tighter leading-[0.95] selection:bg-primary selection:text-primary-foreground italic">
+          <h1 className="text-4xl sm:text-6xl font-black text-foreground tracking-tighter leading-[0.95] sm:leading-[0.85]">
             {article.title}
           </h1>
 
-          <div className="flex flex-wrap items-center justify-between gap-6 mb-16 py-10 border-y border-white/10 relative">
-            <div className="flex items-center gap-8 text-xs sm:text-sm text-muted-foreground font-black uppercase tracking-widest">
-              <div className="flex items-center gap-3">
-                <div className="h-2 w-2 rounded-full bg-primary" />
-                <span>{article.readTime} read</span>
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-4 pt-4 border-t border-black/5 pb-8">
+            <div className="flex items-center gap-2 group cursor-pointer">
+              <div className="h-8 w-8 rounded-full bg-black/5 flex items-center justify-center border border-black/5 group-hover:bg-primary/5 transition-colors">
+                <User className="h-4 w-4 opacity-40 group-hover:opacity-100 group-hover:text-primary transition-all" />
               </div>
-              <div className="flex items-center gap-3">
-                <div className="h-2 w-2 rounded-full bg-white/20" />
-                <span>{publishedDate}</span>
+              <div className="flex flex-col">
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">By Intelligence Desk</span>
+                <span className="text-xs font-bold text-foreground">{article.author}</span>
               </div>
+            </div>
+            
+            <div className="flex flex-col">
+              <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40 flex items-center gap-1.5">
+                <Clock className="h-3 w-3" /> Released
+              </span>
+              <span className="text-xs font-bold text-foreground tabular-nums">{publishedDate}</span>
             </div>
 
-            <div className="flex items-center gap-4">
-              <button
-                onClick={handleToggleSave}
-                className={cn(
-                  "flex h-12 w-12 items-center justify-center rounded-full border border-white/20 transition-all shadow-xl active:scale-95",
-                  isSaved(article.id) ? "bg-primary border-primary text-primary-foreground" : "liquid-glass text-foreground hover:bg-white/20"
-                )}
-                aria-label="Save for later"
-              >
-                {isSaved(article.id) ? <Check className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
-              </button>
-              <button
-                onClick={handleShare}
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 liquid-glass text-foreground hover:bg-white/20 transition-all shadow-xl active:scale-95" aria-label="Share"
-              >
-                <Share2 className="h-5 w-5" />
-              </button>
-            </div>
+            {lastUpdatedDate && (
+              <div className="flex flex-col">
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40 flex items-center gap-1.5">
+                  <History className="h-3 w-3" /> Updated
+                </span>
+                <span className="text-xs font-bold text-primary tabular-nums">{lastUpdatedDate} IST</span>
+              </div>
+            )}
           </div>
-
-          {/* Cover Image */}
-          {article.thumbnail && (
-            <div className="mb-20 overflow-hidden rounded-[40px] border border-white/20 shadow-3xl ios-shadow">
-              <img
-                src={article.thumbnail}
-                alt={article.title}
-                className="aspect-video w-full object-cover"
-              />
-            </div>
-          )}
-
-          <div className="max-w-3xl mx-auto">
-            {/* Summary / TLDR — Liquid Glass Style */}
-            <div className="mb-20 p-10 sm:p-14 rounded-[40px] liquid-glass border border-white/30 relative overflow-hidden group ios-shadow">
-              <div className="absolute top-0 left-0 w-3 h-full bg-primary opacity-20 group-hover:opacity-100 transition-opacity" />
-              <div className="flex items-center gap-3 mb-8 text-primary">
-                <Bookmark className="h-5 w-5 fill-current" />
-                <h2 className="text-[12px] font-black uppercase tracking-[0.4em]">The Intelligence Brief</h2>
-              </div>
-              <p className="text-3xl sm:text-4xl leading-[1.1] text-foreground font-black tracking-tighter italic">
-                {article.content.tldr}
-              </p>
-            </div>
-
-            {/* Content Body */}
-            <div className="mb-20 space-y-12">
-              {article.content.body.split("\n\n").map((para, i) => (
-                <p
-                  key={i}
-                  className="text-lg sm:text-[22px] text-foreground/90 leading-[1.6] font-medium selection:bg-primary selection:text-primary-foreground tracking-tight first-letter:text-5xl first-letter:font-black first-letter:text-primary first-letter:mr-3 first-letter:float-left"
-                >
-                  {para}
-                </p>
-              ))}
-            </div>
-
-            {/* Key Takeaways */}
-            <div className="mb-24 py-20 px-12 rounded-[48px] bg-primary/5 border border-white/10 ios-shadow">
-              <h2 className="text-4xl font-black text-foreground mb-12 tracking-tighter uppercase italic">Essential Insights</h2>
-              <div className="grid grid-cols-1 gap-12">
-                {article.content.points.map((point, i) => (
-                  <div key={i} className="flex gap-8 group">
-                    <span className="text-primary/10 font-black text-6xl leading-[0.8] group-hover:text-primary/30 transition-all duration-500">0{i + 1}</span>
-                    <p className="text-foreground font-bold text-xl leading-tight tracking-tight pt-1">{point}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </article>
-
-        {/* Action Row */}
-        <div className="flex flex-wrap gap-4 mb-32 max-w-3xl mx-auto items-center justify-center sm:justify-start">
-          <Button variant="outline" className="rounded-full border-white/20 liquid-glass text-foreground hover:bg-primary hover:text-primary-foreground font-black px-10 h-14 uppercase tracking-widest text-xs active:scale-95 shadow-xl">
-            <Languages className="mr-3 h-5 w-5" />
-            Read Local
-          </Button>
-          <Button variant="ghost" className="rounded-full text-muted-foreground hover:text-foreground hover:bg-white/5 font-black h-14 px-8 uppercase tracking-widest text-xs">
-            Listen Dispatch
-          </Button>
         </div>
 
-        {/* Recommended */}
-        <section aria-label="Recommended articles" className="animate-fade-in pt-32 border-t border-white/10">
-          <div className="flex flex-col sm:flex-row items-center justify-between mb-16 gap-6">
-            <h2 className="text-4xl sm:text-6xl font-black text-foreground tracking-tighter uppercase italic">Recommended</h2>
-            <Link to="/" className="text-xs font-black text-primary px-6 py-3 rounded-full bg-primary/10 hover:bg-primary hover:text-primary-foreground transition-all uppercase tracking-widest shadow-lg">
-              Explore More →
-            </Link>
+        {/* TL;DR Section - High Clarity */}
+        <section className="mb-16 p-8 sm:p-12 bg-black/[0.03] rounded-[2.5rem] border border-black/5 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-20 transition-opacity">
+            <Info className="h-24 w-24 text-primary" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {recommendations.map((a, i) => (
-              <FeedCard key={a.id} article={a} index={i} />
+          <div className="relative z-10 space-y-6">
+            <div className="flex items-center gap-2.5 text-primary text-[10px] font-black uppercase tracking-[0.4em]">
+              <Sparkles className="h-4 w-4" /> The Intelligence Brief
+            </div>
+            <p className="text-xl sm:text-3xl font-black text-foreground tracking-tight leading-tight">
+              {article.content.tldr}
+            </p>
+          </div>
+        </section>
+
+        {/* Highlights - Fast Scanning (Bullet Format) */}
+        <section className="mb-16 space-y-10">
+          <div className="inline-flex flex-col">
+            <h2 className="text-sm font-black uppercase tracking-[0.4em] text-foreground mb-1.5 opacity-30">Critical Insights</h2>
+            <div className="h-1 w-12 bg-primary" />
+          </div>
+          <div className="grid grid-cols-1 gap-6">
+            {article.content.points.map((point, i) => (
+              <div key={i} className="flex gap-6 group hover:translate-x-2 transition-transform">
+                <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-2xl bg-black/5 border border-black/5 text-[11px] font-black text-primary group-hover:bg-primary group-hover:text-white transition-all transform group-hover:rotate-6">
+                  {i + 1}
+                </div>
+                <p className="text-lg font-bold text-foreground/80 leading-snug pt-1.5">{point}</p>
+              </div>
             ))}
           </div>
         </section>
-      </main>
 
-      {/* Floating Personalization Widget - Desktop */}
-      {nextArticle && (
-        <div className={cn(
-          "fixed bottom-12 right-12 z-[50] hidden xl:block w-80 transition-all duration-700",
-          scrollProgress > 20 ? "translate-y-0 opacity-100" : "translate-y-24 opacity-0 pointer-events-none"
-        )}>
-          <div className="liquid-glass border border-white/20 rounded-[32px] p-6 shadow-3xl ios-shadow">
-            <div className="flex items-center justify-between mb-5">
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Up Next Intelligence</span>
-              <button className="text-muted-foreground hover:text-foreground"><Clock className="h-4 w-4" /></button>
-            </div>
-            <Link to={`/article/${nextArticle.slug}`} className="group block">
-              <h4 className="text-base font-black leading-tight line-clamp-2 mb-5 group-hover:text-primary transition-colors tracking-tight">{nextArticle.title}</h4>
-              <div className="h-12 w-full rounded-2xl bg-white/5 flex items-center justify-center text-[11px] font-black uppercase tracking-[0.2em] text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-all shadow-sm border border-white/10">
-                Read Brief <ChevronRight className="ml-2 h-4 w-4" />
-              </div>
-            </Link>
+        {/* Featured Image */}
+        {article.thumbnail && (
+          <figure className="mb-16 rounded-[3rem] overflow-hidden border border-black/5 shadow-glass-lg group">
+            <img 
+              src={article.thumbnail} 
+              alt={article.title} 
+              className="w-full aspect-[16/9] object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000"
+            />
+          </figure>
+        )}
+
+        {/* Full Article - Standard Formatting */}
+        <div className="prose prose-lg max-w-none mb-24">
+          <div className="space-y-8">
+            {article.content.body.split("\n\n").map((para, i) => (
+              <p key={i} className="text-lg sm:text-xl font-medium text-foreground/75 leading-relaxed tracking-tight">
+                {para}
+              </p>
+            ))}
           </div>
         </div>
-      )}
 
-      {/* Floating mobile action bar */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 sm:hidden w-[calc(100%-2.5rem)] max-w-sm">
-        <div className="liquid-glass border border-white/30 rounded-full h-16 px-2.5 flex items-center gap-3 shadow-3xl ios-shadow">
-          <Button onClick={handleShare} className="flex-1 rounded-full h-12 font-black bg-primary text-primary-foreground hover:bg-primary/90 border-none shadow-xl active:scale-95 uppercase tracking-widest text-[11px]">
-            Share Link
-          </Button>
-          <button
-            onClick={handleToggleSave}
-            className={cn(
-              "h-12 w-12 flex items-center justify-center rounded-full transition-all shadow-lg active:scale-90",
-              isSaved(article.id) ? "bg-primary text-primary-foreground" : "bg-white/10 text-foreground"
-            )}
-          >
-            <Bookmark className={cn("h-5 w-5", isSaved(article.id) && "fill-current")} />
-          </button>
-          <button className="h-12 w-12 flex items-center justify-center rounded-full bg-white/10 text-foreground shadow-lg active:scale-90">
-            <MessageCircle className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
+        {/* Article Timeline - Optional Differentiator */}
+        {article.content.timeline && (
+          <section className="mb-24 p-10 bg-primary/5 rounded-[3rem] border border-primary/10">
+            <h3 className="text-2xl font-black text-primary tracking-tighter uppercase mb-10">Event Timeline</h3>
+            <div className="space-y-8">
+              {article.content.timeline.map((item, i) => (
+                <div key={i} className="flex gap-6 relative">
+                  {i !== article.content.timeline!.length - 1 && (
+                    <div className="absolute top-10 left-3 w-px h-12 bg-primary/20" />
+                  )}
+                  <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center shrink-0">
+                    <div className="h-2 w-2 rounded-full bg-white" />
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-[10px] font-black text-primary/40 uppercase tracking-widest">{item.date}</div>
+                    <p className="text-base font-bold text-foreground/80">{item.event}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Instagram Social Evidence */}
+        {article.instagramUrl && (
+          <section className="mb-24">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground opacity-40 mb-8">Social Dispatch</h3>
+            <InstagramEmbed url={article.instagramUrl} />
+          </section>
+        )}
+
+        {/* References / Trust Layer */}
+        {article.sources && (
+          <section className="mb-24 py-12 border-t border-black/5">
+            <div className="flex items-center gap-3 mb-8">
+              <ExternalLink className="h-4 w-4 text-primary opacity-40" />
+              <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground opacity-40">Verifiable Dispatches</h3>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {article.sources.map((source, i) => (
+                <div key={i} className="px-4 py-2 bg-black/5 rounded-xl text-xs font-black text-foreground/60 border border-black/5 hover:bg-black/10 transition-all cursor-default">
+                  {source}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Related Articles - Engagement Loop */}
+        <section className="pt-24 border-t-2 border-black/5">
+          <div className="flex items-end justify-between mb-12">
+            <h2 className="text-3xl font-black text-foreground tracking-tighter uppercase">Related Dossiers</h2>
+            <Link to="/" className="text-[10px] font-black text-primary uppercase tracking-[0.3em] hover:gap-2 transition-all flex items-center gap-1.5">
+              Back to Feed <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+            {recommendations.map((a) => (
+              <FeedCard key={a.id} article={a} />
+            ))}
+          </div>
+        </section>
+
+      </main>
     </div>
   );
 };
+
+const ArrowRight = ({ className }: { className?: string }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="3" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M5 12h14" />
+    <path d="m12 5 7 7-7 7" />
+  </svg>
+);
 
 export default ArticlePage;

@@ -1,9 +1,8 @@
-import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import type { Article } from "@/data/mockArticles";
 import { categoryColors } from "@/data/mockArticles";
-import { Clock, Flame, ChevronRight } from "lucide-react";
+import { ChevronRight, ArrowUpRight } from "lucide-react";
 
 interface FeedCardProps {
   article: Article;
@@ -11,113 +10,105 @@ interface FeedCardProps {
   variant?: "hero" | "grid" | "list" | "compact" | "minimal";
 }
 
+const brandColorVar: Record<string, string> = {
+  Politics: "var(--brand-politics)",
+  Tech: "var(--brand-tech)",
+  Business: "var(--brand-business)",
+  Cinema: "var(--brand-cinema)",
+  "Local News": "var(--brand-local)",
+  Sports: "var(--brand-sports)",
+  All: "var(--primary)"
+};
+
 const FeedCard = ({ article, index = 0, variant = "grid" }: FeedCardProps) => {
-  const delay = Math.min(index * 60, 300);
+  const delay = Math.min(index * 50, 250);
 
   return (
     <Link
       to={`/article/${article.slug}`}
       className="block group animate-fade-in relative z-10 w-full h-full"
       style={{ animationDelay: `${delay}ms`, animationFillMode: "both" }}
-      aria-label={`Read: ${article.title}`}
     >
       <article
         className={cn(
-          "relative overflow-hidden transition-all duration-700 h-full flex flex-col",
-          "liquid-glass rounded-[40px] border border-white/20",
-          "hover:scale-[1.02] hover:shadow-3xl ios-shadow",
-          "active:scale-[0.98]",
-          variant === "list" ? "sm:flex-row p-2" : "p-3",
-          variant === "minimal" && "justify-center p-8",
-          variant === "compact" && "p-6"
+          "relative overflow-hidden transition-all duration-700 h-full flex flex-col group",
+          "rounded-2xl sm:rounded-3xl border border-black/5 dark:border-white/5 bg-card shadow-sm hover-lift",
+          variant === "list" ? "sm:flex-row" : "",
         )}
       >
-        <div className="absolute inset-0 bg-primary/5 pointer-events-none group-hover:bg-primary/10 transition-colors" />
+        {/* Instagram Look: Top Category Bar (Cream) */}
+        {variant !== "minimal" && variant !== "compact" && (
+          <div className="px-5 py-3 bg-secondary/50 border-b border-black/5 dark:border-white/5 flex items-center justify-between">
+            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-primary dark:text-primary-foreground">
+              {article.category}
+            </span>
+            <div className="h-1.5 w-1.5 rounded-full bg-primary/20 animate-pulse" />
+          </div>
+
+        )}
 
         {/* Thumbnail Section */}
         {article.thumbnail && variant !== "minimal" && (
           <div className={cn(
-            "relative overflow-hidden flex-shrink-0 transition-all duration-700",
-            variant === "hero" ? "w-full aspect-[21/9] rounded-[32px]" :
-              variant === "list" ? "w-full sm:w-48 aspect-video sm:aspect-[4/5] rounded-[24px]" :
-                variant === "compact" ? "w-full aspect-video rounded-[24px] mb-4" :
-                  "w-full aspect-video rounded-[24px] mb-4"
-          )}>
+            "relative overflow-hidden flex-shrink-0",
+            variant === "hero" ? "w-full aspect-[16/9] sm:aspect-[21/9]" :
+              variant === "list" ? "w-full sm:w-80 h-full" :
+                "w-full aspect-square"
+          )} >
             <img
               src={article.thumbnail}
               alt=""
-              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+              className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
+            {/* Glossy Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
-            <div className="absolute top-4 left-4 flex gap-2">
-              <span className={cn(
-                "inline-flex items-center rounded-full px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-white shadow-xl backdrop-blur-md bg-opacity-80 ring-1 ring-white/20",
-                categoryColors[article.category]
-              )}>
-                {article.category}
-              </span>
-            </div>
+            {article.trending && (
+              <div className="absolute top-4 right-4 h-8 w-8 rounded-full glass bg-white/20 flex items-center justify-center text-white backdrop-blur-md">
+                <ArrowUpRight className="h-4 w-4" />
+              </div>
+            )}
           </div>
         )}
 
+        {/* Content Area */}
         <div className={cn(
-          "relative flex-1 flex flex-col justify-center",
-          variant === "hero" ? "p-8 sm:p-12" :
-            variant === "list" ? "p-5 sm:px-8 sm:py-6" :
-              variant === "compact" ? "px-2 py-2" :
-                variant === "minimal" ? "" :
-                  "px-2 pb-4"
+          "relative flex-1 flex flex-col justify-between transition-colors",
+          "p-5 sm:p-7",
+          variant === "grid" || variant === "hero" ? "bg-primary dark:bg-primary/10 text-white dark:text-foreground" : "bg-card text-foreground"
         )}>
-          {/* Top row: badges for minimal/compact */}
-          {(variant === "minimal" || (variant === "grid" && !article.thumbnail)) && (
-            <div className="flex items-center gap-2 mb-4">
-              <span className={cn(
-                "inline-flex items-center rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white shadow-lg",
-                categoryColors[article.category]
+
+          <div className="space-y-4">
+            <h2
+              className={cn(
+                "font-black text-balance leading-[1.1] tracking-tight transition-transform duration-500 group-hover:translate-x-1",
+                variant === "hero" ? "text-2xl sm:text-5xl" : "text-xl sm:text-2xl"
+              )}
+            >
+              {article.title}
+            </h2>
+
+            {variant !== "compact" && (
+              <p className={cn(
+                "leading-relaxed opacity-80 font-medium line-clamp-3",
+                variant === "hero" ? "text-lg" : "text-sm"
               )}>
-                {article.category}
-              </span>
-            </div>
-          )}
-
-          {/* Headline */}
-          <h2
-            className={cn(
-              "font-black text-foreground transition-colors duration-300 mb-3 text-balance tracking-tighter",
-              variant === "hero" ? "text-3xl sm:text-5xl leading-[0.95] italic uppercase" :
-                variant === "grid" || variant === "list" ? "text-xl sm:text-2xl leading-[1.1]" :
-                  variant === "compact" ? "text-lg leading-tight" :
-                    "text-2xl sm:text-4xl leading-[1] italic"
+                {article.summary}
+              </p>
             )}
-          >
-            {article.title}
-          </h2>
+          </div>
 
-          {/* Summary */}
-          {variant !== "compact" && (
-            <p className={cn(
-              "text-muted-foreground leading-relaxed transition-colors font-medium mb-6",
-              variant === "hero" ? "text-base sm:text-xl line-clamp-3" :
-                variant === "minimal" ? "text-lg sm:text-2xl line-clamp-4" :
-                  "text-sm sm:text-base line-clamp-2"
-            )}>
-              {article.summary}
-            </p>
-          )}
-
-          {/* Bottom row */}
+          {/* Footer Card Section */}
           <div className={cn(
-            "mt-auto flex items-center justify-between border-t border-white/10",
-            variant === "compact" ? "pt-2" : "pt-5"
+            "mt-8 flex items-center justify-between pt-6 border-t border-current/10",
           )}>
-            <div className="flex items-center gap-2 text-[10px] sm:text-[11px] text-muted-foreground font-black uppercase tracking-widest">
-              <span>{article.readTime} read</span>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] uppercase font-black tracking-widest opacity-40">Intelligence</span>
+              <span className="text-xs font-bold tabular-nums">{article.readTime} Dispatch</span>
             </div>
-            <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-primary transition-all duration-300 group-hover:gap-3">
-              Read Brief
-              <ChevronRight className="h-4 w-4" />
+            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest group/link">
+              Read More <ChevronRight className="h-3 w-3 group-hover/link:translate-x-1 transition-transform" />
             </div>
           </div>
         </div>
