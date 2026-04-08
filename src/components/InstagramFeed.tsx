@@ -2,6 +2,8 @@ import { Instagram, ArrowUpRight, Heart, MessageCircle, RefreshCw } from 'lucide
 import { Button } from './ui/button';
 import { InstagramEmbed } from 'react-social-media-embed';
 import { useState, useEffect } from 'react';
+import { articles } from '../data/mockArticles';
+import { getArticleImage, handleImageFallback } from '../lib/utils';
 
 const InstagramFeed = () => {
     const [stats, setStats] = useState({
@@ -64,53 +66,53 @@ const InstagramFeed = () => {
 
     // Mock data for the social snapshots
     const posts = [
-        { id: 1, image: "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&q=80&w=300", likes: "1.2k" },
-        { id: 2, image: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&q=80&w=300", likes: "850" },
-        { id: 3, image: "https://images.unsplash.com/photo-1546422122-018583b482c3?auto=format&fit=crop&q=80&w=300", likes: "2.4k" },
-        { id: 4, image: "https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?auto=format&fit=crop&q=80&w=300", likes: "1.1k" },
-        { id: 5, image: "https://images.unsplash.com/photo-1572949645841-094f3a9c4c94?auto=format&fit=crop&q=80&w=300", likes: "920" },
-        { id: 6, image: "https://images.unsplash.com/photo-1541746972996-4e0b0f43e03a?auto=format&fit=crop&q=80&w=300", likes: "3.1k" },
+        { id: 1, image: getArticleImage(articles[0]?.thumbnail), likes: "1.2k" },
+        { id: 2, image: getArticleImage(articles[1]?.thumbnail), likes: "850" },
+        { id: 3, image: getArticleImage(articles[2]?.thumbnail), likes: "2.4k" },
+        { id: 4, image: getArticleImage(articles[3]?.thumbnail), likes: "1.1k" },
+        { id: 5, image: getArticleImage(articles[4]?.thumbnail), likes: "920" },
+        { id: 6, image: getArticleImage(articles[5]?.thumbnail), likes: "3.1k" },
     ];
 
     return (
-        <section className="social-feed-section py-12 border-t border-black/5 dark:border-white/5">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <section className="social-feed-section border-t border-black/5 py-10 dark:border-white/5 sm:py-12">
+            <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12">
                 
                 {/* Profile Info - 4 columns */}
-                <div className="lg:col-span-4 space-y-8">
+                <div className="space-y-6 lg:col-span-4 lg:space-y-8">
                     <div className="space-y-4">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E1306C]/10 text-[#E1306C] text-[10px] font-black uppercase tracking-[0.3em]">
                             <Instagram className="h-3.5 w-3.5" />
                             Live Social Desk
                         </div>
-                        <h2 className="text-4xl font-black text-foreground tracking-tighter leading-none">
+                        <h2 className="text-3xl font-black leading-[1.02] tracking-tighter text-foreground sm:text-4xl">
                             Connecting through <br /><span className="text-[#E1306C]">@openvaartha</span>
                         </h2>
-                        <p className="text-sm font-bold text-muted-foreground leading-relaxed max-w-xs">
+                        <p className="max-w-md text-sm font-bold leading-relaxed text-muted-foreground lg:max-w-xs">
                             Get behind-the-scenes reporting, quick infographics, and real-time community updates directly on our Instagram feed.
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-8">
+                    <div className="grid grid-cols-3 gap-3 sm:flex sm:items-center sm:gap-8">
                         <div className="flex flex-col">
                             <div className="flex items-center gap-1.5">
-                                <span className="text-2xl font-black text-foreground tabular-nums tracking-tighter">{stats.followers}</span>
+                                <span className="text-xl font-black tracking-tighter text-foreground tabular-nums sm:text-2xl">{stats.followers}</span>
                                 {stats.isLive && <RefreshCw className="h-3 w-3 text-primary animate-[spin_4s_linear_infinite]" />}
                             </div>
                             <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Followers</span>
                             {stats.isLive && <span className="text-[6px] font-black text-primary uppercase tracking-[0.2em] -mt-1 scale-90 -translate-x-1">Live Sync</span>}
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-2xl font-black text-foreground tabular-nums tracking-tighter">{stats.posts}</span>
+                            <span className="text-xl font-black tracking-tighter text-foreground tabular-nums sm:text-2xl">{stats.posts}</span>
                             <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Dispatches</span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-2xl font-black text-foreground tabular-nums tracking-tighter">500k+</span>
+                            <span className="text-xl font-black tracking-tighter text-foreground tabular-nums sm:text-2xl">500k+</span>
                             <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Monthly Reach</span>
                         </div>
                     </div>
 
-                    <div className="rounded-2xl overflow-hidden glass border border-black/5 dark:border-white/5 shadow-glass-sm max-w-[328px]">
+                    <div className="max-w-full overflow-hidden rounded-2xl border border-black/5 glass shadow-glass-sm dark:border-white/5 sm:max-w-[328px]">
                         <InstagramEmbed url="https://www.instagram.com/openvaartha/" width="100%" />
                     </div>
 
@@ -118,9 +120,9 @@ const InstagramFeed = () => {
                         href="https://www.instagram.com/openvaartha/" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="inline-block"
+                        className="inline-block w-full sm:w-auto"
                     >
-                        <Button className="rounded-xl h-12 px-8 font-black bg-[#E1306C] text-white hover:bg-[#C13584] hover:scale-[1.02] active:scale-95 transition-all text-xs uppercase tracking-widest gap-2">
+                        <Button className="h-11 w-full rounded-xl bg-[#E1306C] px-6 text-[11px] font-black uppercase tracking-widest text-white transition-all hover:scale-[1.02] hover:bg-[#C13584] active:scale-95 sm:h-12 sm:w-auto sm:px-8 sm:text-xs gap-2">
                             FOLLOW ON INSTAGRAM <ArrowUpRight className="h-4 w-4" />
                         </Button>
                     </a>
@@ -128,19 +130,21 @@ const InstagramFeed = () => {
 
                 {/* Simulated Feed Grid - 8 columns */}
                 <div className="lg:col-span-8">
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3">
                         {posts.map((post) => (
                             <a 
                                 key={post.id}
                                 href="https://www.instagram.com/openvaartha/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group relative aspect-square rounded-2xl overflow-hidden glass border-transparent hover:border-[#E1306C]/30 transition-all duration-500"
+                                className="group relative aspect-square overflow-hidden rounded-xl border-transparent glass transition-all duration-500 hover:border-[#E1306C]/30 sm:rounded-2xl"
                             >
                                 <img 
                                     src={post.image} 
                                     alt="" 
                                     className="h-full w-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-2 opacity-90 group-hover:opacity-100"
+                                    loading="lazy"
+                                    onError={handleImageFallback}
                                 />
                                 
                                 {/* Overlay on Hover */}

@@ -9,7 +9,7 @@ import {
   User, ExternalLink, History, Info,
   Zap
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, getArticleImage, handleImageFallback } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useReadingList } from "@/hooks/use-reading-list";
 import { toast } from "sonner";
@@ -161,15 +161,14 @@ const ArticlePage = () => {
         </section>
 
         {/* Featured Image */}
-        {article.thumbnail && (
-          <figure className="mb-16 rounded-[3rem] overflow-hidden border border-black/5 shadow-glass-lg group">
-            <img 
-              src={article.thumbnail} 
-              alt={article.title} 
-              className="w-full aspect-[16/9] object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000"
-            />
-          </figure>
-        )}
+        <figure className="mb-16 rounded-[3rem] overflow-hidden border border-black/5 shadow-glass-lg group">
+          <img 
+            src={getArticleImage(article.thumbnail)} 
+            alt={article.title} 
+            className="w-full aspect-[16/9] object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000"
+            onError={handleImageFallback}
+          />
+        </figure>
 
         {/* Full Article - Standard Formatting */}
         <div className="prose prose-lg max-w-none mb-24">

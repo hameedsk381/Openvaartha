@@ -11,16 +11,6 @@ interface CategoryChipsProps {
   isInsideStack?: boolean;
 }
 
-const brandColorVar: Record<string, string> = {
-  Politics: "var(--brand-politics)",
-  Tech: "var(--brand-tech)",
-  Business: "var(--brand-business)",
-  Cinema: "var(--brand-cinema)",
-  "Local News": "var(--brand-local)",
-  Sports: "var(--brand-sports)",
-  All: "var(--primary)"
-};
-
 const CategoryChips = ({ selected, onSelect, isInsideStack }: CategoryChipsProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -34,13 +24,12 @@ const CategoryChips = ({ selected, onSelect, isInsideStack }: CategoryChipsProps
       
       <div
         ref={scrollRef}
-        className="mx-auto flex max-w-[1280px] items-center gap-1.5 overflow-x-auto px-4 sm:px-6 lg:px-8 py-1.5 sm:py-2 scrollbar-hide no-scrollbar"
+        className="mx-auto flex max-w-[1280px] items-center gap-1.5 overflow-x-auto px-4 py-2 scrollbar-hide no-scrollbar sm:px-6 lg:px-8"
         role="tablist"
         aria-label="News categories"
       >
         {categories.map((cat) => {
           const isSelected = selected === cat;
-          const brandColor = brandColorVar[cat];
           
           return (
             <button
@@ -49,7 +38,7 @@ const CategoryChips = ({ selected, onSelect, isInsideStack }: CategoryChipsProps
               aria-selected={isSelected}
               onClick={() => onSelect(cat)}
               className={cn(
-                "relative flex h-8 sm:h-9 shrink-0 items-center justify-center rounded-xl sm:rounded-lg px-4 sm:px-5 text-[11px] sm:text-[12px] font-black transition-all duration-500",
+                "relative flex h-8 shrink-0 items-center justify-center rounded-xl px-4 text-[11px] font-black transition-all duration-300 sm:h-9 sm:rounded-lg sm:px-5 sm:text-[12px]",
                 "active:scale-95 group outline-none focus-visible:ring-2 focus-visible:ring-primary/20",
                 isSelected
                   ? "bg-primary text-primary-foreground shadow-glass border-black/10"

@@ -36,10 +36,10 @@ const Index = () => {
         <BreakingTicker />
       </div>
 
-      <main className="mx-auto max-w-[1280px] pt-[140px] sm:pt-[160px] pb-16 px-4 sm:px-6 lg:px-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <main className="mx-auto max-w-[1280px] px-3.5 pt-[140px] pb-14 sm:px-6 sm:pt-[160px] sm:pb-16 lg:px-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
         
         {selectedCategory === 'All' ? (
-          <div className="space-y-16">
+          <div className="space-y-10 sm:space-y-14 lg:space-y-16">
             {/* High Impact Hero - Direct Feed */}
             <HeroCarousel articles={heroHeadlines} />
 
@@ -50,19 +50,19 @@ const Index = () => {
             <InstagramFeed />
 
             {/* Quick Summaries - 60sec Intelligence */}
-            <section className="bg-white dark:bg-white/[0.03] rounded-3xl p-6 sm:p-10 border border-black/5 dark:border-white/5 shadow-sm">
-              <div className="flex items-center gap-3 mb-8">
+            <section className="rounded-3xl border border-black/5 bg-white p-5 shadow-glass-sm dark:border-white/5 dark:bg-white/[0.03] sm:p-8 lg:p-10">
+              <div className="mb-7 flex items-center gap-3 sm:mb-8">
                 <div className="h-10 w-10 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
                   <Clock className="h-5 w-5 text-white" />
                 </div>
                 <div className="space-y-0.5">
-                  <h2 className="text-xl font-black text-foreground tracking-tighter uppercase">In 60 Seconds</h2>
+                  <h2 className="text-lg font-black uppercase tracking-tight text-foreground sm:text-xl">In 60 Seconds</h2>
                   <p className="text-[9px] font-extrabold text-muted-foreground uppercase tracking-widest opacity-60">Intelligence Sync</p>
                 </div>
               </div>
 
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
                 {quickBriefings.map((article) => (
                   <div key={article.id} className="space-y-4 group">
                     <Link to={`/article/${article.slug}`} className="block">
@@ -70,7 +70,7 @@ const Index = () => {
                         {article.title}
                       </h3>
                     </Link>
-                    <ul className="space-y-2.5">
+                    <ul className="space-y-2">
                       {article.content.points.slice(0, 2).map((point, i) => (
                         <li key={i} className="flex gap-3 text-[13px] font-bold text-muted-foreground/60 leading-snug">
                           <span className="shrink-0 text-primary opacity-40">•</span>
@@ -84,7 +84,7 @@ const Index = () => {
             </section>
 
             {/* Distribution Engine - Category Strips */}
-            <div className="space-y-20">
+            <div className="space-y-12 sm:space-y-16 lg:space-y-20">
               {categories.map((cat) => (
                 <CategoryStrip 
                   key={cat} 
@@ -95,16 +95,16 @@ const Index = () => {
             </div>
 
             {/* Engagement Loop - Newsletter */}
-            <section className="relative overflow-hidden rounded-3xl bg-primary dark:bg-primary/20 p-8 sm:p-16 shadow-2xl border border-black/10 dark:border-white/10 group">
+            <section className="relative overflow-hidden rounded-3xl border border-black/10 bg-primary p-6 shadow-2xl dark:border-white/10 dark:bg-primary/20 sm:p-10 lg:p-16 group">
               <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50" />
-              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+              <div className="relative z-10 grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-10">
                 <div className="space-y-6">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass bg-white/10 text-white text-[9px] font-black uppercase tracking-[0.3em]">
                     <Bell className="h-3 w-3" />
                     Daily Intelligence
                   </div>
                   <div className="space-y-3">
-                    <h3 className="text-3xl sm:text-5xl font-black text-white tracking-tighter leading-[0.95]">
+                    <h3 className="text-3xl font-black tracking-tighter text-white leading-[1.02] sm:text-5xl sm:leading-[0.95]">
                       The morning briefing.<br /><span className="text-white/40 italic">Zero noise.</span>
                     </h3>
                     <p className="text-base text-primary-foreground/70 font-bold max-w-md leading-tight">
@@ -112,7 +112,7 @@ const Index = () => {
                     </p>
                   </div>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-3 items-center bg-white/5 rounded-2xl p-2 border border-white/10 focus-within:border-white/30 transition-all">
+                <div className="flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-2 transition-all focus-within:border-white/30 sm:flex-row">
                   <input
                     type="email"
                     placeholder="ENTER EMAIL ADDRESS"
@@ -141,8 +141,8 @@ const Index = () => {
           </div>
         )}
 
-        <footer className="mt-24 pt-16 border-t border-black/5 dark:border-white/5">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <footer className="mt-14 border-t border-black/5 pt-10 dark:border-white/5 sm:mt-24 sm:pt-16">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-12">
             <div className="space-y-6">
               <div className="text-xl font-black tracking-tighter text-foreground uppercase">OPEN<span className="text-primary">VAARTHA</span></div>
               <p className="text-[13px] font-bold text-muted-foreground leading-relaxed opacity-60">

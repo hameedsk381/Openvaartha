@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { cn, getArticleImage, handleImageFallback } from "@/lib/utils";
 import { Search, Sun, Moon, Bookmark, User, Compass, Newspaper, LogOut, Bell, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -150,7 +150,12 @@ const Navbar = ({ isInsideStack }: { isInsideStack?: boolean }) => {
                           className="flex gap-3 p-2.5 rounded-xl transition-all duration-500 hover:bg-white/5 group border border-transparent hover:border-white/10 shadow-sm"
                         >
                           <div className="h-14 w-14 rounded-lg overflow-hidden shrink-0 glass-thin">
-                            <img src={a.thumbnail} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" alt="" />
+                            <img
+                              src={getArticleImage(a.thumbnail)}
+                              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                              alt=""
+                              onError={handleImageFallback}
+                            />
                           </div>
                           <div className="space-y-0.5 min-w-0">
                             <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">{a.category}</span>
